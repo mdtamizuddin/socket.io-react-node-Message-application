@@ -53,7 +53,10 @@ const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide })
                 message: newMessage
             })
             api.post('/message/message-in', newMessage)
-                .then(res => refetch())
+                .then(res => {
+                    refetch()
+                    e.target.reset()
+                })
         }
     }
 
