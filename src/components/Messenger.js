@@ -1,10 +1,45 @@
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
+import api from '../instance/instance'
+import Loading from './Loading'
 import Message from './Message'
+import UserCard from './UserCard'
+import io from 'socket.io-client'
+const socket = io.connect('https://mdtamiz.xyz')
 
 const Messenger = () => {
+    const [showInfo, setShowInfo] = useState(false)
+    const [showSide, setShowSide] = useState(false)
+    const [selected, setSelected] = useState({})
+    const { isLoading, data } = useQuery({
+        queryKey: ['All User'], queryFn:
+            () => api.get('/users').then(res => {
+                return res.data
+            })
+    })
+    useEffect(() => {
+        const sel = localStorage.getItem("selectedE")
+        const nam = localStorage.getItem("selectedN")
+        const selectedP = localStorage.getItem("selectedP")
+        setSelected({
+            email: sel,
+            photoURL
+                : selectedP, name: nam
+        })
+    }, [])
+    if (isLoading) {
+        return <Loading />
+    }
     return (
-        <div className='flex h-screen w-full overflow-hidden'>
-            <div className='w-[15%] h-full bg-blue-50 shadow-lg p-5'>
+        <div className='flex md:h-screen h-[92vh] w-full overflow-hidden'>
+            <div className={`w-[300px]  ${showSide ? "" : "hidden md:block "} animate__animated animate__fadeInLeft h-full bg-blue-50 shadow-lg p-5 absolute md:relative z-30 `}>
+                <div className='flex justify-end'>
+                    <button className='text-3xl block md:hidden primary px-2'
+                        onClick={() => setShowSide(false)}
+                    >
+                        <i className="fa-solid fa-toggle-on"></i>
+                    </button>
+                </div>
                 <h1 className='text-3xl font-semibold mb-5'>
                     Chats
                 </h1>
@@ -19,19 +54,39 @@ const Messenger = () => {
                     Inbox
                 </h2>
 
+
+                <div>
+                    {
+                        data?.map(user => {
+                            return <div onClick={() => {
+                                setSelected(user)
+                                localStorage.setItem("selectedE", user.email)
+                                localStorage.setItem("selectedN", user.name)
+                                localStorage.setItem("selectedP", user.
+                                    photoURL
+                                )
+                            }} key={user._id}>
+                                <UserCard user={user} />
+                            </div>
+                        })
+                    }
+                </div>
             </div>
 
             {/* Users Profile section  */}
             {/* Users Profile section  */}
 
-            <div className='w-[70%] h-full'>
-                <Message />
+            <div className='w-full h-full'>
+                <Message socket={socket} show={showInfo} setShow={setShowInfo} selectedUser={selected} showSide={showSide} setShowSide={setShowSide} />
 
-               
+
             </div>
-            <div className='w-[15%] h-full bg-blue-50 shadow-lg p-5'>
-                <h1>Profiles</h1>
-            </div>
+            {
+                showInfo &&
+                <div className='w-[15%] h-full bg-blue-50 shadow-lg p-5'>
+                    <h1>Profiles</h1>
+                </div>
+            }
         </div>
     )
 }
