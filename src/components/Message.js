@@ -1,35 +1,65 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { toast } from 'react-hot-toast'
 import api from '../instance/instance'
+import AddFriendModel from './AddFriendModel'
 import { auth } from './Auth/firebase/firebase.init'
 import useUser from './hooks/useUser'
 import Loading from './Loading'
 
 
-const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide }) => {
-
-    const user = useUser()
+const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSelected, }) => {
+    const { currentUser, } = useUser()
+    // const [allmessage, setallmessage] = useState([])
+    // const { isLoading, data: allmessage, refetch } = useQuery({
+    //     queryKey: [`All Messages`], queryFn:
+    //         () =>
+    //           .then(res => {
+    //                 // setallmessage(res.data)
+    //                 return res.data
+    //             })
+    // })
     const { isLoading, data: allmessage, refetch } = useQuery({
-        queryKey: [`${user.email}/${selectedUser?.email}`], queryFn:
-            () => api.get(`/message/message/${user.email}/${selectedUser?.email}`).then(res => {
-                return res.data
-            })
+        queryKey: [`our Messages`, currentUser, selected],
+        queryFn: () => api.get(`/message/message/${currentUser?.email}/${selected?.email}`).
+            then(res => res.data)
+        ,
+        refetchInterval: 10000
     })
 
     useEffect(() => {
-        const messageContainer = document.getElementById("messageContainer")
-        messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight
+        if (selected.length < 1) {
+            const messageContainer = document.getElementById("messageContainer")
+            messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight
+        }
     }, [allmessage])
-
+    // console.log(selected)
     useEffect(() => {
         socket.on("recive_message", (data) => {
             refetch()
-            toast.success(`New Message ${data.message.sender.email}`)
+            // toast.success(`New Message ${data.message.sender.email}`)
         })
-    }, [])
+        // socket.on("user-joined", (data) => {
+        //     setActive(data)
+        //     clear()
+        // })
 
+        // socket.on("gaya", (data) => {
+        //     console.log(data)
+        // })
+        api.get(`/users/get/${currentUser?.lastChat?.email}`)
+            .then(res => setSelected(res.data))
+
+    }, [currentUser])
+
+    const { } = useQuery({
+        queryKey: [`selected user`], queryFn:
+            () => api.get(`/users/get/${currentUser?.lastChat?.email}`).then(res => {
+                setSelected(res.data)
+                return res.data
+            }),
+        refetchInterval: 5000
+    })
     const [image, setImage] = useState("")
     const [emoji, setEmoji] = useState("")
     const date = new Date
@@ -38,15 +68,15 @@ const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide })
         const message = e.target.message.value
         const newMessage = {
             sender: {
-                email: user.email,
-                image: user.photoURL
+                email: currentUser?.email,
+                image: currentUser?.photoURL
             },
             receiver: {
-                email: selectedUser.email,
-                image: selectedUser.photoURL
+                email: selected.email,
+                image: selected.photoURL
             },
             image, emoji, message, date,
-            user: `${user.email}&${selectedUser?.email}`
+            user: `${currentUser?.email}&${selected?.email}`
         }
         if (message) {
             socket.emit("send_message", {
@@ -60,7 +90,14 @@ const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide })
         }
     }
 
-    // get Messages Form Database 
+    // if (!selected?.email) {
+    //     return <div className='px-3'>
+    //         <h1 onClick={() => {
+    //             setShowSide(true)
+    //         }} className='text-center text-2xl font-semibold py-10' > Select A User</h1 >
+    //         <AddFriendModel />
+    //     </div>
+    // }
 
     return (
         <div className='w-full h-full flex flex-col justify-between'>
@@ -76,15 +113,23 @@ const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide })
                     </div>
                     <div className='ml-2'>
                         <h2 className='text-[16px] mb-0 pb-0 font-semibold'>
-                            {selectedUser?.name}
+                            {selected?.name}
                         </h2>
-                        <div className='text-sm mt-0 pt-0 text-green-500 flex items-center'>
-                            <div className='w-3 h-3 rounded-full bg-green-500 mr-1'></div>
-                            <span>Active now</span>
-                        </div>
+                        {
+                            selected?.active === true
+                                ?
+                                <div className='text-sm mt-0 pt-0 text-green-500 flex items-center'>
+                                    <div className='w-3 h-3 rounded-full bg-green-500 mr-1'></div>
+                                    <span>Active now</span>
+                                </div>
+                                :
+                                <div className='text-sm mt-0 pt-0 text-red-500 flex items-center'>
+                                    <div className='w-3 h-3 rounded-full bg-red-500 mr-1'></div>
+                                    <span>Offline</span>
+                                </div>
+                        }
                     </div>
                 </div>
-
                 <div className='pr-5'>
                     <button className='primary font-extrabold'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 font-extrabold" >
@@ -114,7 +159,7 @@ const Message = ({ show, setShow, socket, selectedUser, showSide, setShowSide })
             {/* Top Part End  */}
             {/* Top Part End  */}
 
-            <div className='overflow-y-scroll h-full p-5'
+            <div className='overflow-y-scroll overflow-x-hidden h-full p-5'
                 id='messageContainer'
             >
                 {

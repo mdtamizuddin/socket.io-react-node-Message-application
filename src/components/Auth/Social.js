@@ -1,15 +1,21 @@
 import React from 'react'
+import { toast } from 'react-hot-toast'
 
 const Social = () => {
+
     return (
         <>
-            <a className="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center mb-3" style={{ backgroundColor: '#3b5998' }} href="#!" role="button" data-mdb-ripple="true" data-mdb-ripple-color="light">
+            <a
+                onClick={() => toast.error("This Method Is Not Available Please continue with Menual system")}
+                className="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center mb-3" style={{ backgroundColor: '#3b5998' }} href="#!" role="button" data-mdb-ripple="true" data-mdb-ripple-color="light">
                 {/* Facebook */}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className="w-3.5 h-3.5 mr-2">
                     {/*! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. */}
                     <path fill="currentColor" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" /></svg>Continue with Facebook
             </a>
-            <a className="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center" style={{ backgroundColor: '#55acee' }} href="#!" role="button" data-mdb-ripple="true" data-mdb-ripple-color="light">
+            <a
+                onClick={() => toast.error("This Method Is Not Available Please continue with Menual system")}
+                className="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center" style={{ backgroundColor: '#55acee' }} href="#!" role="button" data-mdb-ripple="true" data-mdb-ripple-color="light">
                 {/* Twitter */}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-3.5 h-3.5 mr-2">
                     {/*! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. */}

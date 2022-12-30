@@ -23,6 +23,7 @@ const Login = () => {
                     localStorage.removeItem("selectedE")
                     localStorage.removeItem("selectedN")
                     localStorage.removeItem("selectedP")
+                    localStorage.setItem("CUemail" , user.email)
                 }
                 // ...
             })
