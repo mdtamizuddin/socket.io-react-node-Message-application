@@ -5,7 +5,7 @@ import UserCard from './UserCard'
 import io from 'socket.io-client'
 import useUser from './hooks/useUser'
 import AddFriendModel from './AddFriendModel'
-const socket = io.connect('http://localhost:5000')
+const socket = io.connect('https://mdtamiz.xyz')
 
 const Messenger = () => {
     const { currentUser } = useUser()
