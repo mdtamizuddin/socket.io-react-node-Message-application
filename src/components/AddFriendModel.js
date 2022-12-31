@@ -9,10 +9,12 @@ const AddFriendModel = () => {
     const [exist, setExist] = useState(false)
     const { currentUser, refetch } = useUser()
     const search = (email) => {
+        const eemail = email.toLowerCase()
+
         setEmail(email)
         const isEmail = email.includes("@", ".")
         if (isEmail) {
-            api.get(`/users/get/${email}`)
+            api.get(`/users/get/${eemail}`)
                 .then(res => {
                     setUser(res.data)
                     setExist(currentUser?.friendList?.filter(u => u === res.data.email))

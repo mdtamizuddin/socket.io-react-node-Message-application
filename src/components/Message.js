@@ -6,9 +6,10 @@ import api from '../instance/instance'
 import { auth } from './Auth/firebase/firebase.init'
 import useUser from './hooks/useUser'
 import Loading from './Loading'
-
+import tune from '../drop.mp3'
 
 const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSelected, }) => {
+
     const { currentUser, } = useUser()
     // const [allmessage, setallmessage] = useState([])
     // const { isLoading, data: allmessage, refetch } = useQuery({
@@ -35,8 +36,13 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
     }, [allmessage])
     // console.log(selected)
     useEffect(() => {
+        const sound = new Audio(tune)
         socket.on("recive_message", (data) => {
-            refetch()
+            if (data?.message?.message?.receiver?.email === currentUser?.email) {
+                refetch()
+                sound.play()
+            }
+
             // toast.success(`New Message ${data.message.sender.email}`)
         })
         // socket.on("user-joined", (data) => {

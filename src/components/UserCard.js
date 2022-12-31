@@ -10,7 +10,7 @@ const UserCard = ({ user }) => {
             .then(res => setUser(res.data))
     }, [])
     return (
-        <div className='my-2 flex items-center'>
+        <div className='my-3 flex items-center cursor-pointer'>
             <div className="avater w-10 h-10 rounded-full overflow-hidden">
                 <img src={use.photoURL} alt="" />
             </div>
