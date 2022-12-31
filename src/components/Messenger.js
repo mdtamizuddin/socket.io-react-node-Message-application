@@ -105,7 +105,7 @@ const Messenger = () => {
             </div>
             {
                 showInfo &&
-                <div className='w-[15%] h-full bg-blue-50 shadow-lg p-5'>
+                <div className='w-[15%] hidden h-full bg-blue-50 shadow-lg p-5'>
                     <h1>Profiles</h1>
                 </div>
             }

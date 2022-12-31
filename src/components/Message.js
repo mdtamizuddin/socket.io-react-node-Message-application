@@ -22,18 +22,21 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
     // })
     const { isLoading, data: allmessage, refetch } = useQuery({
         queryKey: [`our Messages`, currentUser, selected],
-        queryFn: () => api.get(`/message/message/${currentUser?.email}/${selected?.email}`).
-            then(res => res.data)
+        queryFn: () => api.get(`/message/message/${currentUser?.email}/${selected?.email}`)
+            .then(res => res.data)
         ,
         refetchInterval: 5000
     })
 
     useEffect(() => {
-        if (selected.length < 1) {
-            const messageContainer = document.getElementById("messageContainer")
-            messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight
-        }
+
+        goBottom()
     }, [allmessage])
+
+    function goBottom() {
+        const messageContainer = document.getElementById("messageContainer")
+        messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight
+    }
     // console.log(selected)
     useEffect(() => {
         const sound = new Audio(tune)
@@ -41,6 +44,7 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
             if (data?.message?.message?.receiver?.email === currentUser?.email) {
                 refetch()
                 sound.play()
+                goBottom()
             }
 
             // toast.success(`New Message ${data.message.sender.email}`)
@@ -92,6 +96,8 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
                 .then(res => {
                     refetch()
                     e.target.reset()
+                    e.target.focus()
+
                 })
         }
     }
@@ -203,6 +209,7 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
                     onSubmit={formData}
                 >
                     <input
+
                         className='text-black w-full bg-blue-50 rounded-full h-8 focus:outline-none px-5'
                         type="Write Your Message Here"
                         name='message'
