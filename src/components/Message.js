@@ -25,7 +25,7 @@ const Message = ({ show, setShow, socket, showSide, setShowSide, selected, setSe
         queryFn: () => api.get(`/message/message/${currentUser?.email}/${selected?.email}`).
             then(res => res.data)
         ,
-        refetchInterval: 10000
+        refetchInterval: 5000
     })
 
     useEffect(() => {
