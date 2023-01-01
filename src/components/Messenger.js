@@ -5,6 +5,7 @@ import UserCard from './UserCard'
 import io from 'socket.io-client'
 import useUser from './hooks/useUser'
 import AddFriendModel from './AddFriendModel'
+// const socket = io.connect('http://localhost:5000')
 const socket = io.connect('https://mdtamiz.xyz')
 
 const Messenger = () => {
@@ -35,7 +36,7 @@ const Messenger = () => {
 
 
     return (
-        <div className='flex md:h-screen h-[92vh] w-full overflow-hidden'>
+        <div className='flex md:h-[91vh] h-[84vh] w-full overflow-hidden'>
             <div className={`w-[300px]  ${showSide ? "" : "hidden md:block "} animate__animated animate__fadeInLeft h-full bg-blue-50 shadow-lg p-5 absolute md:relative z-30 `}>
 
                 <div className='flex justify-end'>

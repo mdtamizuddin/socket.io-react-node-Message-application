@@ -1,0 +1,20 @@
+@media screen and (max-width: 600px) {
+    .wrapper .shortcuts {
+        display: none;
+
+    }
+
+    .wrapper {
+        display: block !important;
+        padding: 0;
+    }
+
+    .posts {
+        width: 100%;
+        padding: 15px;
+    }
+
+    nav .right-side {
+        justify-content: space-between;
+    }
+}
